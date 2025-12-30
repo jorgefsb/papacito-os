@@ -1,0 +1,50 @@
+# Personal information (DO NOT UPLOAD)
+core/identity.md
+core/decision-metrics.md
+people/
+projects/amber/
+projects/sparkplug/
+projects/personal-brand/
+projects/personal-life/
+projects/learning-creative/
+knowledge-base/amber-overview.md
+knowledge-base/sparkplug-overview.md
+inbox/
+outputs/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backup files
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+tmp/
+temp/
