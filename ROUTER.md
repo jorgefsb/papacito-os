@@ -25,8 +25,8 @@ Este es el tablero de control para gestionar tus agentes en paralelo.
 
 | Agente | Tarea Actual | Status | Avance |
 | :--- | :--- | :--- | :--- |
-| **Antigravity** | Consolidando Gestión | 🟢 Pensando | 70% |
-| **Spark** | Auditoría PapacitoOS | 🟡 Esperando Orden | 100% (Logs listos) |
+| **Antigravity** | Setup Git Master-Prompt | 🟢 Completado | 100% |
+| **Spark** | Auditoría PapacitoOS | 🟡 Listo para Acción | 100% |
 | **BD Hunter** | 🚧 Por definir | ⚪️ INACTIVO | - |
 | **PM Brandcade** | 🚧 Por definir | ⚪️ INACTIVO | - |
 
@@ -39,7 +39,7 @@ Este es el tablero de control para gestionar tus agentes en paralelo.
 3.  **Sincronización:** Todos leemos y escribimos en `_LOGS-HISTORIAL/`, así que si yo termino algo, Spark lo sabrá de inmediato.
 
 ## 🎯 Próximo "Multi-Agent" Move sugerido:
-- **Agente 1 (Antigravity):** Terminar el Setup de Git para el Master-Prompt.
-- **Agente 2 (Spark):** Empezar a redactar el contenido para un Post de LinkedIn sobre PapacitoOS.
+- **Agente 1 (Antigravity):** Coordinar redacción de Post con Spark.
+- **Agente 2 (Spark):** Redactar contenido para Post de LinkedIn sobre PapacitoOS.
 
 ¿Te gusta esta forma de visualizarlo?

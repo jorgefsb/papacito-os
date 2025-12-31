@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-os-gray-50 text-os-gray-800;
+  }
+}
+
+/* Custom Scrollbar for OS look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-os-gray-200 rounded-full hover:bg-os-gray-800 transition-colors;
+}
