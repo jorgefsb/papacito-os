@@ -110,6 +110,23 @@
         .dark .hover\:bg-os-gray-50:hover {
             background-color: #334155 !important;
         }
+
+        /* Logo switching for dark mode */
+        .logo-light {
+            display: block;
+        }
+
+        .logo-dark {
+            display: none;
+        }
+
+        .dark .logo-light {
+            display: none;
+        }
+
+        .dark .logo-dark {
+            display: block;
+        }
     </style>
 </head>
 
@@ -138,7 +155,9 @@
         <!-- Logo -->
         <div class="h-24 flex items-center justify-center border-b border-os-gray-100">
             <img src="logo-white.png" alt="Papacito OS Logo"
-                class="h-16 w-auto hover:scale-105 transition-transform duration-300">
+                class="h-16 w-auto hover:scale-105 transition-transform duration-300 logo-light">
+            <img src="logo-dark.png" alt="Papacito OS Logo"
+                class="h-16 w-auto hover:scale-105 transition-transform duration-300 logo-dark">
         </div>
 
         <div class="p-4 space-y-4">
