@@ -71,7 +71,11 @@
         <div class="p-4 space-y-4">
             <!-- Global Command -->
             <div>
-                <h4 class="text-xs font-bold text-os-gray-200 uppercase mb-2 px-2">Global Command</h4>
+                <div class="flex items-center justify-between mb-2 px-2">
+                    <h4 class="text-xs font-bold text-os-gray-200 uppercase">Global Command</h4>
+                    <i data-lucide="help-circle" class="w-3 h-3 text-os-gray-200 cursor-help"
+                        title="Switch to the Master View of your entire ecosystem"></i>
+                </div>
                 <button onclick="setMode('GLOBAL')" id="btn-global"
                     class="w-full flex items-center px-3 py-2 rounded-md text-sm font-bold transition-colors mb-1 bg-os-blue-dark text-white shadow-lg shadow-os-blue-DEFAULT/30">
                     <i data-lucide="globe" class="w-4 h-4 mr-3"></i>
@@ -81,7 +85,11 @@
 
             <!-- Entities -->
             <div>
-                <h4 class="text-xs font-bold text-os-gray-200 uppercase mb-2 px-2">Entities</h4>
+                <div class="flex items-center justify-between mb-2 px-2">
+                    <h4 class="text-xs font-bold text-os-gray-200 uppercase">Entities</h4>
+                    <i data-lucide="help-circle" class="w-3 h-3 text-os-gray-200 cursor-help"
+                        title="Select a specific context to filter agents and metrics"></i>
+                </div>
                 <div class="space-y-1">
                     <button onclick="setMode('AMBER')" id="btn-amber"
                         class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50 border border-transparent">
