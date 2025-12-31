@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papacito Dashboard - Preview</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'os-gray': {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#9CA3AF',
+                            800: '#1F2937',
+                            900: '#111827'
+                        },
+                        'os-blue': {
+                            light: '#E0F2FE',
+                            DEFAULT: '#0EA5E9',
+                            dark: '#0369A1'
+                        },
+                        'os-green': {
+                            DEFAULT: '#10B981'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-os-gray-50 text-os-gray-900 h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-os-gray-200 h-full flex flex-col flex-shrink-0">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-os-gray-100">
+            <div class="w-8 h-8 bg-os-blue-DEFAULT rounded-full flex items-center justify-center text-white font-bold mr-3">P</div>
+            <span class="font-bold text-lg tracking-tight text-os-gray-800">Papacito OS</span>
+        </div>
+
+        <div class="p-4 space-y-4">
+            <!-- Global Command -->
+            <div>
+                <h4 class="text-xs font-bold text-os-gray-200 uppercase mb-2 px-2">Global Command</h4>
+                <button onclick="setMode('GLOBAL')" id="btn-global" class="w-full flex items-center px-3 py-2 rounded-md text-sm font-bold transition-colors mb-1 bg-os-blue-dark text-white shadow-lg shadow-os-blue-DEFAULT/30">
+                    <i data-lucide="globe" class="w-4 h-4 mr-3"></i>
+                    Papacito OS
+                </button>
+            </div>
+
+            <!-- Entities -->
+            <div>
+                <h4 class="text-xs font-bold text-os-gray-200 uppercase mb-2 px-2">Entities</h4>
+                <div class="space-y-1">
+                    <button onclick="setMode('AMBER')" id="btn-amber" class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50 border border-transparent">
+                        <i data-lucide="building-2" class="w-4 h-4 mr-3"></i>
+                        Amber Studio
+                    </button>
+                    <button onclick="setMode('SPARKPLUG')" id="btn-sparkplug" class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50 border border-transparent">
+                        <i data-lucide="zap" class="w-4 h-4 mr-3 fill-current"></i>
+                        Sparkplug
+                    </button>
+                    <button onclick="setMode('PERSONAL')" id="btn-personal" class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50 border border-transparent">
+                        <i data-lucide="user" class="w-4 h-4 mr-3"></i>
+                        Personal Brand
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-os-gray-100 my-2 mx-4"></div>
+
+        <!-- Menu -->
+        <nav class="flex-1 px-4 py-2 space-y-1">
+            <button class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-blue-DEFAULT bg-os-gray-50">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3"></i>
+                Dashboard
+            </button>
+            <button class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50">
+                <i data-lucide="message-square" class="w-4 h-4 mr-3"></i>
+                Feed
+            </button>
+            <button class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50">
+                <i data-lucide="users" class="w-4 h-4 mr-3"></i>
+                Agents
+            </button>
+            <button class="w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors text-os-gray-800 hover:bg-os-gray-50">
+                <i data-lucide="pie-chart" class="w-4 h-4 mr-3"></i>
+                Reports
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-os-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-os-blue-DEFAULT to-os-blue-dark"></div>
+                <div>
+                    <p class="text-sm font-semibold">Jorge Suarez</p>
+                    <p class="text-xs text-os-gray-200">Admin</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 p-8 overflow-y-auto custom-scrollbar">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <span id="global-badge" class="text-xs font-bold text-os-blue-DEFAULT uppercase tracking-widest mb-1 block">System Overview</span>
+                <h1 id="page-title" class="text-2xl font-bold text-os-gray-900 font-sans tracking-tight">Papacito OS</h1>
+                <p id="page-desc" class="text-sm text-os-gray-200 mt-1">Consolidated view of all entities</p>
+            </div>
+            <div class="flex gap-2">
+                <span class="bg-white px-3 py-1 rounded-full text-xs font-semibold text-os-gray-800 border border-os-gray-200 shadow-sm flex items-center">
+                    <span class="w-2 h-2 rounded-full bg-os-green-DEFAULT mr-2 animate-pulse"></span>
+                    System Operational
+                </span>
+            </div>
+        </header>
+
+        <!-- KPI RIPPON -->
+        <div class="grid grid-cols-4 gap-4 mb-6" id="kpi-container">
+            <!-- KPIs injected by JS -->
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="grid grid-cols-12 gap-6">
+
+            <!-- ENTITY STATUS (Global Only) -->
+            <div id="entity-status-row" class="col-span-12 grid grid-cols-3 gap-6 mb-2">
+                <!-- Entity cards injected by JS -->
+            </div>
+
+            <!-- MAIN CHART -->
+            <div class="col-span-8">
+                <div class="bg-white p-6 rounded-lg border border-os-gray-100 shadow-sm h-96 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="chart-title" class="text-lg font-bold text-os-blue-dark">Total Ecosystem Value</h3>
+                        <i data-lucide="more-horizontal" class="w-5 h-5 text-os-gray-200 cursor-pointer"></i>
+                    </div>
+                    <div class="flex-1 w-full bg-slate-50 rounded flex items-end justify-between px-2 pb-2 overflow-hidden relative border-b border-l border-slate-200">
+                        <!-- Simulated Area Chart -->
+                        <div class="absolute inset-0 bg-gradient-to-b from-os-blue-light/50 to-transparent opacity-50 pointer-events-none"></div>
+                        <!-- Simple bars for viz -->
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 30%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 45%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 40%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 60%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 55%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 75%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 40%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 85%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 65%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 90%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 70%"></div>
+                        <div class="w-8 bg-os-blue-DEFAULT/80 rounded-t" style="height: 80%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AGENT ACTIVITY -->
+            <div class="col-span-4">
+                <div class="bg-white p-6 rounded-lg border border-os-gray-100 shadow-sm h-96 flex flex-col">
+                    <h3 id="agents-title" class="text-lg font-bold text-os-gray-900 mb-4">Active Agents</h3>
+                    <div id="agents-list" class="space-y-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
+                        <!-- Agents injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- HEATMAP -->
+            <div class="col-span-6">
+                <div class="bg-white p-6 rounded-lg border border-os-gray-100 shadow-sm h-64 flex flex-col">
+                    <h3 class="text-lg font-bold text-os-gray-900 mb-4">Operational Speed</h3>
+                    <div id="heatmap-grid" class="flex flex-wrap gap-2 h-full content-center justify-center">
+                        <!-- Heatmap cells injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALERTS -->
+            <div class="col-span-6">
+                <div class="bg-white p-6 rounded-lg border border-os-gray-100 shadow-sm h-64 flex flex-col">
+                    <h3 class="text-lg font-bold text-os-gray-900 mb-4">Priority Alerts</h3>
+                    <div id="alerts-list" class="space-y-2">
+                        <!-- Alerts injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MOCK DATA & LOGIC -->
+    <script>
+        const DATA = {
+            GLOBAL: {
+                kpis: [
+                    { label: 'Net Worth', value: '$2.4M', icon: 'clock', trend: 'up' },
+                    { label: 'Total MRR', value: '$560k', icon: 'dollar-sign', trend: 'up' },
+                    { label: 'Active Agents', value: '11/11', icon: 'users', trend: 'stable' },
+                    { label: 'System Health', value: '98%', icon: 'activity', trend: 'stable' }
+                ],
+                agents: [
+                    { name: 'GM Co-Pilot', role: 'Business', status: 'Reviewing reports', active: true },
+                    { name: 'BD Hunter', role: 'Sales', status: 'Prospecting Sparkplug...', active: true },
+                    { name: 'COO Digital', role: 'Ops', status: 'Optimizing resources', active: true },
+                    { name: 'Research Analyst', role: 'Support', status: 'Analysis: Bitrix', active: true },
+                    { name: 'Content Strategist', role: 'Content', status: 'Drafting posts', active: true }
+                ],
+                entities: [
+                    { name: 'Amber Studio', health: '95%', agents: '3 Active', trend: 'up' },
+                    { name: 'Sparkplug', health: '88%', agents: '2 Active', trend: 'down' },
+                    { name: 'Personal Brand', health: '92%', agents: '1 Active', trend: 'up' }
+                ],
+                chartTitle: 'Total Ecosystem Value',
+                agentTitle: 'All Active Agents'
+            },
+            AMBER: {
+                kpis: [
+                    { label: 'Runway', value: '18 mo', icon: 'clock', trend: 'stable' },
+                    { label: 'MRR', value: '$520k', icon: 'dollar-sign', trend: 'up' },
+                    { label: 'Headcount', value: '1,050', icon: 'users', trend: 'up' },
+                    { label: 'EBITDA', value: '22%', icon: 'activity', trend: 'stable' }
+                ],
+                agents: [
+                    { name: 'GM Co-Pilot', role: 'Business', status: 'Strategy Review', active: true },
+                    { name: 'PM Brandcade', role: 'Product', status: 'Milestone Scope', active: true },
+                    { name: 'COO Digital', role: 'Ops', status: 'Resource Allocation', active: true }
+                ],
+                chartTitle: 'Cash Flow vs Opp. Cost',
+                agentTitle: 'Allocated Agents'
+            },
+            SPARKPLUG: {
+                kpis: [
+                    { label: 'Runway', value: '8 mo', icon: 'clock', trend: 'down' },
+                    { label: 'MRR', value: '$35k', icon: 'dollar-sign', trend: 'up' },
+                    { label: 'Active Users', value: '320', icon: 'users', trend: 'up' },
+                    { label: 'Churn', value: '3.2%', icon: 'activity', trend: 'down' }
+                ],
+                agents: [
+                    { name: 'BD Hunter', role: 'Sales', status: 'Cold Outreach', active: true },
+                    { name: 'Research Analyst', role: 'Support', status: 'Competitor Analysis', active: true }
+                ],
+                chartTitle: 'Revenue Growth',
+                agentTitle: 'Allocated Agents'
+            },
+            PERSONAL: {
+                kpis: [
+                    { label: 'Followers', value: '32.5k', icon: 'users', trend: 'up' },
+                    { label: 'Engagement', value: '5.2%', icon: 'activity', trend: 'up' },
+                    { label: 'Posts/Wk', value: '4', icon: 'clock', trend: 'stable' },
+                    { label: 'Leads', value: '12', icon: 'dollar-sign', trend: 'up' }
+                ],
+                agents: [
+                    { name: 'Content Strategist', role: 'Content', status: 'Writing Post', active: true }
+                ],
+                chartTitle: 'Impressions & Reach',
+                agentTitle: 'Allocated Agents'
+            }
+        };
+
+        function renderKPIs(mode) {
+            const container = document.getElementById('kpi-container');
+            container.innerHTML = DATA[mode].kpis.map(kpi => `
+                <div class="bg-white p-4 rounded-lg border border-os-gray-200 shadow-sm flex flex-col justify-between hover:translate-y-[-2px] transition-transform duration-200 group">
+                    <div class="flex justify-between items-start mb-2">
+                        <i data-lucide="${kpi.icon}" class="w-5 h-5 text-os-gray-200"></i>
+                        ${kpi.trend === 'up' 
+                            ? '<i data-lucide="arrow-up" class="w-4 h-4 text-green-500"></i>' 
+                            : kpi.trend === 'down' 
+                            ? '<i data-lucide="arrow-down" class="w-4 h-4 text-red-500"></i>'
+                            : '<span class="text-gray-400 font-bold text-xs">=</span>'
+                        }
+                    </div>
+                    <div>
+                        <span class="text-xs text-os-gray-200 uppercase font-bold tracking-wide">${kpi.label}</span>
+                        <div class="text-2xl font-bold text-os-gray-900 mt-1">${kpi.value}</div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderAgents(mode) {
+            const list = document.getElementById('agents-list');
+            list.innerHTML = DATA[mode].agents.map(agent => `
+                <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-os-gray-50 transition-colors border border-transparent hover:border-os-gray-100 cursor-pointer">
+                    <div class="w-8 h-8 rounded-full bg-os-gray-100 flex items-center justify-center text-xs font-bold text-os-blue-dark">
+                        ${agent.name.charAt(0)}
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-os-gray-900">${agent.name}</p>
+                        <p class="text-xs text-os-gray-800 mt-0.5">${agent.status}</p>
+                        <span class="inline-block mt-2 text-[10px] uppercase tracking-wider text-os-gray-200 font-bold bg-white border border-os-gray-200 px-1.5 py-0.5 rounded">
+                            ${agent.role}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHeatmap() {
+            const grid = document.getElementById('heatmap-grid');
+            grid.innerHTML = Array.from({ length: 24 }).map(() => {
+                const level = Math.floor(Math.random() * 4);
+                const color = level === 0 ? 'bg-os-gray-100' : level === 1 ? 'bg-os-blue-light' : level === 2 ? 'bg-os-blue-DEFAULT' : 'bg-os-blue-dark';
+                return `<div class="w-8 h-8 rounded-md transition-all duration-500 hover:scale-110 ${color}"></div>`;
+            }).join('');
+        }
+
+        function renderEntities(mode) {
+            const row = document.getElementById('entity-status-row');
+            if (mode === 'GLOBAL') {
+                row.innerHTML = DATA['GLOBAL'].entities.map(e => `
+                    <div class="bg-white p-4 rounded-lg border border-os-gray-100 shadow-sm flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-os-blue-light flex items-center justify-center text-os-blue-dark">
+                                <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-os-gray-900">${e.name}</h4>
+                                <p class="text-xs text-os-gray-200">${e.agents}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-os-gray-900">${e.health}</p>
+                            <div class="flex items-center gap-1 justify-end">
+                                ${e.trend === 'up' ? '<i data-lucide="arrow-up" class="w-3 h-3 text-green-500"></i>' : '<i data-lucide="arrow-down" class="w-3 h-3 text-red-500"></i>'}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                row.style.display = 'grid';
+            } else {
+                row.style.display = 'none';
+            }
+            lucide.createIcons();
+        }
+
+        function renderAlerts(mode) {
+            const list = document.getElementById('alerts-list');
+            let alerts = [];
+            
+            if (mode === 'GLOBAL' || mode === 'AMBER') {
+                alerts.push(`<div class="bg-red-50 border-l-4 border-red-500 p-3 text-sm text-red-700"><strong>Amber Studio:</strong> Project Alpha is delayed by 15%.</div>`);
+            }
+            if (mode === 'GLOBAL' || mode === 'SPARKPLUG') {
+                alerts.push(`<div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 text-sm text-yellow-700"><strong>Sparkplug:</strong> Churn risk detected for Client X.</div>`);
+            }
+            alerts.push(`<div class="bg-blue-50 border-l-4 border-blue-500 p-3 text-sm text-blue-700"><strong>System:</strong> Weekly backup completed successfully.</div>`);
+            
+            list.innerHTML = alerts.join('');
+        }
+
+        function setMode(mode) {
+            // Update UI State for Sidebar Buttons
+            const buttons = ['global', 'amber', 'sparkplug', 'personal'];
+            buttons.forEach(b => {
+                const btn = document.getElementById(`btn-${b}`);
+                if (b.toUpperCase() === mode) {
+                    // Active style
+                    if (b === 'global') {
+                        btn.className = "w-full flex items-center px-3 py-2 rounded-md text-sm font-bold transition-colors mb-1 bg-os-blue-dark text-white shadow-lg shadow-os-blue-DEFAULT/30";
+                    } else {
+                        btn.className = "w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors bg-os-blue-light text-os-blue-dark border border-os-blue-DEFAULT/20";
+                    }
+                } else {
+                    // Inactive style
+                    btn.className = "w-full flex items-center px-3 py-2 rounded-md text-sm font-bold transition-colors mb-1 text-os-gray-800 hover:bg-os-gray-50 border border-transparent";
+                    if(b !== 'global') {
+                        btn.classList.add('font-medium');
+                        btn.classList.remove('font-bold', 'mb-1');
+                    }
+                }
+            });
+
+            // Update Header
+            document.getElementById('page-title').innerText = mode === 'GLOBAL' ? 'Papacito OS' : (mode.charAt(0) + mode.slice(1).toLowerCase().replace('_', ' '));
+            document.getElementById('page-desc').innerText = mode === 'GLOBAL' ? 'Consolidated view of all entities' : `Specific dashboard for ${mode}`;
+            document.getElementById('global-badge').style.display = mode === 'GLOBAL' ? 'block' : 'none';
+            document.getElementById('chart-title').innerText = DATA[mode].chartTitle;
+            document.getElementById('agents-title').innerText = DATA[mode].agentTitle;
+
+            // Render Components
+            renderKPIs(mode);
+            renderAgents(mode);
+            renderEntities(mode);
+            renderAlerts(mode);
+            // Re-render heatmap randomly for effect
+            renderHeatmap();
+        }
+
+        // Init
+        setMode('GLOBAL');
+        lucide.createIcons();
+
+    </script>
+</body>
+</html>
