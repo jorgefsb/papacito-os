@@ -11,6 +11,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -28,6 +29,11 @@
                         },
                         'os-green': {
                             DEFAULT: '#10B981'
+                        },
+                        'os-dark': {
+                            bg: '#0F172A',
+                            card: '#1E293B',
+                            border: '#334155'
                         }
                     },
                     fontFamily: {
@@ -41,6 +47,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -55,10 +62,76 @@
             background: #E5E7EB;
             border-radius: 4px;
         }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Dark mode transitions */
+        .dark body {
+            background-color: #0F172A;
+            color: #F1F5F9;
+        }
+
+        .dark aside {
+            background-color: #1E293B;
+            border-color: #334155;
+        }
+
+        .dark .bg-white {
+            background-color: #1E293B !important;
+        }
+
+        .dark .border-os-gray-100,
+        .dark .border-os-gray-200 {
+            border-color: #334155 !important;
+        }
+
+        .dark .text-os-gray-900 {
+            color: #F1F5F9 !important;
+        }
+
+        .dark .text-os-gray-800 {
+            color: #CBD5E1 !important;
+        }
+
+        .dark .text-os-gray-200 {
+            color: #94A3B8 !important;
+        }
+
+        .dark .bg-os-gray-50 {
+            background-color: #0F172A !important;
+        }
+
+        .dark .bg-os-gray-100 {
+            background-color: #334155 !important;
+        }
+
+        .dark .hover\:bg-os-gray-50:hover {
+            background-color: #334155 !important;
+        }
     </style>
 </head>
 
 <body class="bg-os-gray-50 text-os-gray-900 h-screen flex overflow-hidden">
+
+    <script>
+        // Auto-detect system preference on load
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        // Listen for system preference changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
 
     <!-- SIDEBAR -->
     <aside class="w-64 bg-white border-r border-os-gray-200 h-full flex flex-col flex-shrink-0">
@@ -159,12 +232,19 @@
                 </h1>
                 <p id="page-desc" class="text-sm text-os-gray-200 mt-1">Consolidated view of all entities</p>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 items-center">
                 <span
                     class="bg-white px-3 py-1 rounded-full text-xs font-semibold text-os-gray-800 border border-os-gray-200 shadow-sm flex items-center">
                     <span class="w-2 h-2 rounded-full bg-os-green-DEFAULT mr-2 animate-pulse"></span>
                     System Operational
                 </span>
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()"
+                    class="bg-white p-2 rounded-full border border-os-gray-200 shadow-sm hover:bg-os-gray-50 transition-colors"
+                    title="Toggle Dark Mode">
+                    <i data-lucide="moon" class="w-4 h-4 text-os-gray-800 dark-hide"></i>
+                    <i data-lucide="sun" class="w-4 h-4 text-yellow-500 light-hide hidden"></i>
+                </button>
             </div>
         </header>
 
