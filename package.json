@@ -1,0 +1,35 @@
+{
+  "name": "papacito-os",
+  "version": "4.0.0",
+  "description": "Your Personal Knowledge System - 100% Local, 100% Private, 100% Free",
+  "author": "Jorge Suárez <jorge@getsparkplug.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jorgefsb/papacito-os.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jorgefsb/papacito-os/issues"
+  },
+  "homepage": "https://github.com/jorgefsb/papacito-os#readme",
+  "keywords": [
+    "second-brain",
+    "knowledge-management",
+    "local-first",
+    "privacy",
+    "whisper",
+    "ocr",
+    "notes",
+    "productivity",
+    "open-source"
+  ],
+  "scripts": {
+    "setup": "cd my-app && ./setup-local.sh",
+    "start": "cd my-app && ./start.sh",
+    "dev": "cd my-app && npm run dev",
+    "build": "cd my-app && npm run build"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: my-app/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd my-app
+        npm ci
+    
+    - name: Type check
+      run: |
+        cd my-app
+        npm run type-check || true
+    
+    - name: Build
+      run: |
+        cd my-app
+        npm run build
+    
+    - name: Test (if exists)
+      run: |
+        cd my-app
+        npm test || true

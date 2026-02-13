@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400">
+  <!-- Background -->
+  <rect width="1200" height="400" fill="#0a0a0f"/>
+  
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="brain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e94560" />
+      <stop offset="100%" style="stop-color:#ff6b6b" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="400" fill="url(#grad1)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="150" fill="#e94560" opacity="0.05"/>
+  <circle cx="1100" cy="300" r="200" fill="#533483" opacity="0.05"/>
+  
+  <!-- Brain icon -->
+  <g transform="translate(150, 100) scale(0.8)">
+    <circle cx="256" cy="256" r="200" fill="none" stroke="#533483" stroke-width="8" opacity="0.6"/>
+    <path d="M256 120 C180 120, 120 180, 120 256 C120 332, 180 392, 256 392 C332 392, 392 332, 392 256 C392 180, 332 120, 256 120 Z" fill="url(#brain)"/>
+    <path d="M200 200 Q230 180, 256 200 T312 200" fill="none" stroke="#ff8e8e" stroke-width="6" stroke-linecap="round"/>
+    <path d="M180 256 Q210 236, 256 256 T332 256" fill="none" stroke="#ff8e8e" stroke-width="6" stroke-linecap="round"/>
+    <path d="M200 312 Q230 292, 256 312 T312 312" fill="none" stroke="#ff8e8e" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="200" cy="200" r="12" fill="#fff"/>
+    <circle cx="312" cy="200" r="12" fill="#fff"/>
+    <circle cx="256" cy="256" r="16" fill="#fff"/>
+    <circle cx="200" cy="312" r="12" fill="#fff"/>
+    <circle cx="312" cy="312" r="12" fill="#fff"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="500" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#fff">Papacito OS</text>
+  
+  <!-- Subtitle -->
+  <text x="500" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#e94560">Your Personal Knowledge System</text>
+  
+  <!-- Tagline -->
+  <text x="500" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#888">100% Local • 100% Private • 100% Free</text>
+  
+  <!-- Features icons -->
+  <g transform="translate(500, 330)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#fff">📝</text>
+    <text x="40" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#fff">🎙️</text>
+    <text x="80" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#fff">📸</text>
+    <text x="120" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#fff">🔍</text>
+    <text x="160" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#fff">🔒</text>
+  </g>
+</svg>

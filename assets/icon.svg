@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="brain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e94560"/>
+      <stop offset="100%" style="stop-color:#ff6b6b"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f3460"/>
+      <stop offset="100%" style="stop-color:#533483"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  
+  <!-- Outer glow ring -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#glow)" stroke-width="8" opacity="0.6"/>
+  
+  <!-- Brain silhouette -->
+  <path d="M256 120 
+           C180 120, 120 180, 120 256 
+           C120 332, 180 392, 256 392 
+           C332 392, 392 332, 392 256 
+           C392 180, 332 120, 256 120 Z
+           M256 150 
+           C316 150, 362 196, 362 256 
+           C362 316, 316 362, 256 362 
+           C196 362, 150 316, 150 256 
+           C150 196, 196 150, 256 150 Z" 
+        fill="url(#brain)"/>
+  
+  <!-- Brain folds -->
+  <path d="M200 200 Q230 180, 256 200 T312 200" 
+        fill="none" stroke="#ff8e8e" stroke-width="6" stroke-linecap="round"/>
+  <path d="M180 256 Q210 236, 256 256 T332 256" 
+        fill="none" stroke="#ff8e8e" stroke-width="6" stroke-linecap="round"/>
+  <path d="M200 312 Q230 292, 256 312 T312 312" 
+        fill="none" stroke="#ff8e8e" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Connection nodes -->
+  <circle cx="200" cy="200" r="12" fill="#fff"/>
+  <circle cx="312" cy="200" r="12" fill="#fff"/>
+  <circle cx="256" cy="256" r="16" fill="#fff"/>
+  <circle cx="200" cy="312" r="12" fill="#fff"/>
+  <circle cx="312" cy="312" r="12" fill="#fff"/>
+  
+  <!-- Spark/dino accent -->
+  <path d="M380 100 L395 130 L425 125 L405 150 L420 180 L390 165 L370 190 L375 160 L345 155 L370 140 Z" 
+        fill="#ffd700"/>
+  
+  <!-- Text: P -->
+  <text x="256" y="420" font-family="system-ui, -apple-system, sans-serif" 
+        font-size="48" font-weight="bold" fill="#fff" text-anchor="middle">P</text>
+</svg>
