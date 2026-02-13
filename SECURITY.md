@@ -9,7 +9,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Papacito OS, please report it by emailing jorge@getsparkplug.com.
+If you discover a security vulnerability in Papacito OS, please open a private security advisory on GitHub.
 
 Please include:
 - Description of the vulnerability

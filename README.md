@@ -33,9 +33,9 @@ Search across all your notes (text, transcribed audio, OCR'd images) with keywor
 
 ### 🏷️ **Auto-Tagging**
 Notes are automatically tagged based on keywords:
-- `sparkplug` - Business ideas
-- `amber` - Work-related
-- `family` - Personal
+- `business` - Business ideas
+- `work` - Work-related
+- `personal` - Personal matters
 - `urgent` - Time-sensitive
 - `finance` - Money matters
 - `learning` - Courses, books
@@ -234,9 +234,9 @@ MIT License - see [LICENSE](LICENSE) file
 
 ## 🦖 About
 
-Created by **Jorge Suárez** ([@jorgefsb](https://github.com/jorgefsb))
+Created with ❤️ for the open source community.
 
-Powered by **Spark Crew** 🦖
+Powered by AI + Human collaboration 🤖💙👤
 
 *"Speak, photograph, write. Your second brain is alive."*
 

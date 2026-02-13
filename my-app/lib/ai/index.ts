@@ -12,16 +12,16 @@ export interface Tag {
 // ==================== KEYWORDS SIMPLE (Sin IA) ====================
 
 const KEYWORD_MAP: Record<string, string[]> = {
-  'sparkplug': ['sparkplug', 'creative', 'subscription', 'cliente', 'marketing', 'getsparkplug'],
-  'amber': ['amber', 'studio', 'game', 'juego', 'vr', 'unity', 'tudor'],
-  'strategy': ['strategy', 'estrategia', 'plan', 'objetivo', 'meta', '2025', '2026'],
-  'finance': ['finance', 'finanzas', 'money', 'dinero', 'mercury', 'ingresos', 'gastos'],
-  'family': ['family', 'familia', 'elena', 'hija', 'casa', 'dragón', 'meme', 'ana'],
-  'ai': ['ai', 'ia', 'inteligencia artificial', 'gpt', 'modelo', 'embedding', 'yoshi', 'luna'],
-  'urgent': ['urgent', 'urgente', 'ahora', 'inmediato', 'hoy', 'asap'],
-  'meeting': ['meeting', 'reunión', 'llamada', 'zoom', 'teams', 'sync'],
-  'idea': ['idea', 'idea', 'concepto', 'brainstorm', 'creativo'],
-  'learning': ['learning', 'aprendiendo', 'curso', 'libro', 'leer', 'estudiar'],
+  'business': ['business', 'empresa', 'cliente', 'marketing', 'ventas', 'startup'],
+  'work': ['work', 'trabajo', 'project', 'proyecto', 'deadline', 'entrega'],
+  'strategy': ['strategy', 'estrategia', 'plan', 'objetivo', 'meta', 'goal'],
+  'finance': ['finance', 'finanzas', 'money', 'dinero', 'budget', 'ingresos', 'gastos'],
+  'personal': ['personal', 'familia', 'family', 'home', 'casa', 'life'],
+  'tech': ['tech', 'tecnología', 'code', 'software', 'app', 'system'],
+  'urgent': ['urgent', 'urgente', 'ahora', 'inmediato', 'hoy', 'asap', 'priority'],
+  'meeting': ['meeting', 'reunión', 'llamada', 'call', 'sync', 'standup'],
+  'idea': ['idea', 'concepto', 'brainstorm', 'creative', 'innovation'],
+  'learning': ['learning', 'aprendiendo', 'curso', 'book', 'libro', 'study'],
 };
 
 /**
