@@ -14,7 +14,9 @@ import {
   Image as ImageIcon,
   MoreHorizontal,
   Clock,
-  Tag
+  Tag,
+  Link2,
+  RefreshCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,30 +40,69 @@ interface Stats {
   notes: number;
   tags: number;
   connections: number;
+  byPara: {
+    projects: number;
+    areas: number;
+    resources: number;
+    archives: number;
+  };
 }
 
 export default function SecondBrain() {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [stats, setStats] = useState<Stats>({ notes: 0, tags: 0, connections: 0 });
+  const [stats, setStats] = useState<Stats>({ 
+    notes: 0, 
+    tags: 0, 
+    connections: 0,
+    byPara: { projects: 0, areas: 0, resources: 0, archives: 0 }
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [newNote, setNewNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeView, setActiveView] = useState<"list" | "graph">("list");
 
-  // Fetch notes on mount
+  // 🧠 LOCALSTORAGE: Cargar notas al montar
   useEffect(() => {
-    fetchNotes();
+    loadNotesFromStorage();
   }, []);
 
-  const fetchNotes = async () => {
+  const loadNotesFromStorage = () => {
     try {
-      const response = await fetch("/api/notes");
-      const data = await response.json();
-      setNotes(data.notes || []);
-      setStats(data.stats || { notes: 0, tags: 0, connections: 0 });
+      const stored = localStorage.getItem('papacito-notes');
+      if (stored) {
+        const parsedNotes = JSON.parse(stored);
+        setNotes(parsedNotes);
+        updateStats(parsedNotes);
+      }
     } catch (error) {
-      console.error("Error fetching notes:", error);
+      console.error("Error loading notes:", error);
     }
+  };
+
+  const saveNotesToStorage = (newNotes: Note[]) => {
+    try {
+      localStorage.setItem('papacito-notes', JSON.stringify(newNotes));
+      updateStats(newNotes);
+    } catch (error) {
+      console.error("Error saving notes:", error);
+    }
+  };
+
+  const updateStats = (currentNotes: Note[]) => {
+    const allTags = currentNotes.flatMap(n => n.tags || []);
+    const uniqueTags = [...new Set(allTags)];
+    
+    setStats({
+      notes: currentNotes.length,
+      tags: uniqueTags.length,
+      connections: Math.floor(currentNotes.length * 0.3), // Estimado
+      byPara: {
+        projects: currentNotes.filter(n => n.tags?.includes('project')).length,
+        areas: currentNotes.filter(n => n.tags?.includes('area')).length,
+        resources: currentNotes.filter(n => n.tags?.includes('resource')).length,
+        archives: currentNotes.filter(n => n.tags?.includes('archive')).length,
+      }
+    });
   };
 
   const createNote = async () => {
@@ -69,16 +110,24 @@ export default function SecondBrain() {
     
     setIsLoading(true);
     try {
-      const response = await fetch("/api/notes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: newNote, content_type: "text", source: "web" }),
-      });
+      // 🧠 Crear nota local
+      const note: Note = {
+        id: Date.now().toString(),
+        content: newNote,
+        content_type: "text",
+        source: "web",
+        created_at: new Date().toISOString(),
+        tags: extractTags(newNote),
+      };
       
-      if (response.ok) {
-        setNewNote("");
-        fetchNotes();
-      }
+      const updatedNotes = [note, ...notes];
+      setNotes(updatedNotes);
+      saveNotesToStorage(updatedNotes);
+      setNewNote("");
+      
+      // 🔄 TODO: Sync con Supabase cuando esté listo
+      // await syncToSupabase(note);
+      
     } catch (error) {
       console.error("Error creating note:", error);
     } finally {
@@ -86,9 +135,92 @@ export default function SecondBrain() {
     }
   };
 
-  const filteredNotes = notes.filter(note => 
-    note.content.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const extractTags = (content: string): string[] => {
+    const tags: string[] = [];
+    if (content.toLowerCase().includes('proyecto') || content.toLowerCase().includes('project')) tags.push('project');
+    if (content.toLowerCase().includes('área') || content.toLowerCase().includes('area')) tags.push('area');
+    if (content.toLowerCase().includes('recurso') || content.toLowerCase().includes('resource')) tags.push('resource');
+    if (content.toLowerCase().includes('idea')) tags.push('idea');
+    if (content.toLowerCase().includes('tarea') || content.toLowerCase().includes('task')) tags.push('task');
+    return tags;
+  };
+
+  const [searchResults, setSearchResults] = useState<Note[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [surpriseConnections, setSurpriseConnections] = useState<any[]>([]);
+  const [showSurprise, setShowSurprise] = useState(false);
+
+  // 🧠 Búsqueda local (simulada - reemplazar con Supabase después)
+  const performSemanticSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    
+    setIsSearching(true);
+    try {
+      // 🔄 TODO: Reemplazar con búsqueda vectorial en Supabase
+      // Por ahora: búsqueda por palabras clave
+      const lowerQuery = query.toLowerCase();
+      const matched = notes.filter(note => 
+        note.content.toLowerCase().includes(lowerQuery) ||
+        note.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
+      );
+      setSearchResults(matched);
+    } catch (error) {
+      console.error("Search error:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // 🪝 HOOKED: Generar conexiones sorpresa localmente
+  const loadSurpriseConnections = async () => {
+    try {
+      // 🔄 TODO: Reemplazar con análisis de embeddings en Supabase
+      // Por ahora: conectar notas con tags similares
+      if (notes.length < 2) return;
+      
+      const connections = [];
+      for (let i = 0; i < Math.min(3, notes.length); i++) {
+        const noteA = notes[i];
+        const noteB = notes[(i + 1) % notes.length];
+        
+        connections.push({
+          reason: "Notas relacionadas",
+          noteAContent: noteA.content.substring(0, 50) + "...",
+          noteBContent: noteB.content.substring(0, 50) + "...",
+        });
+      }
+      
+      setSurpriseConnections(connections);
+      setShowSurprise(true);
+    } catch (error) {
+      console.error("Surprise error:", error);
+    }
+  };
+
+  // Debounce para búsqueda
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (searchQuery) {
+        performSemanticSearch(searchQuery);
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+    
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
+
+  // Cargar conexiones sorpresa al inicio (si hay notas)
+  useEffect(() => {
+    if (notes.length >= 2) {
+      loadSurpriseConnections();
+    }
+  }, [notes.length]);
+
+  const filteredNotes = searchQuery ? searchResults : notes;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -262,6 +394,61 @@ export default function SecondBrain() {
               </CardContent>
             </Card>
           </div>
+
+          {/* 🪝 HOOKED: Conexiones Sorpresa */}
+          {showSurprise && surpriseConnections.length > 0 && !searchQuery && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+                <h3 className="text-lg font-semibold">✨ Conexiones Descubiertas</h3>
+                <span className="text-xs text-muted-foreground">(HOOKED Variable Reward)</span>
+              </div>
+              <div className="grid gap-4">
+                {surpriseConnections.map((conn, idx) => (
+                  <Card 
+                    key={idx} 
+                    className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30 cursor-pointer hover:border-indigo-500/50 transition-all"
+                    onClick={() => {
+                      // 🪝 HOOKED: Click en conexión = dopamina
+                      // Abriría la nota en un modal (feature futura)
+                      console.log("Conexión clickeada:", conn);
+                    }}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0">
+                          <Link2 className="w-4 h-4 text-indigo-400" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-indigo-300 mb-1">
+                            {conn.reason}
+                          </p>
+                          <div className="flex gap-4 text-xs text-muted-foreground">
+                            <span className="truncate">"{conn.noteAContent}"</span>
+                            <span className="text-indigo-400">↔</span>
+                            <span className="truncate">"{conn.noteBContent}"</span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={loadSurpriseConnections}
+                className="mt-2 text-indigo-400 hover:text-indigo-300"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Descubrir más conexiones
+              </Button>
+            </motion.div>
+          )}
 
           {/* Notes Grid */}
           <AnimatePresence mode="popLayout">

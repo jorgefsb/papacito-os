@@ -5,7 +5,7 @@
 
 export type Emotion = 'happy' | 'sad' | 'angry' | 'stressed' | 'tired' | 'excited' | 'neutral' | 'urgent';
 
-interface EmotionResult {
+export interface EmotionResult {
   emotion: Emotion;
   intensity: number; // 1-10
   emoji: string;

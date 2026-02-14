@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 
-const DB_PATH = process.env.DB_PATH || join(process.cwd(), 'data', 'brain.db');
+const DB_PATH = process.env.DB_PATH || join(process.cwd(), 'second-brain.db');
 
 let db: Database.Database | null = null;
 
@@ -28,13 +28,35 @@ export interface Note {
   updated_at: string;
   embedding?: Buffer;
   metadata?: string;
+  
+  // PARA Classification
+  para_category?: 'projects' | 'areas' | 'resources' | 'archives';
+  project_id?: string;
+  area_id?: string;
+  
+  // Auto-extracted metadata
+  title?: string;
+  summary?: string;
+  key_insights?: string;
+  
+  // Media handling
+  media_url?: string;
+  media_transcript?: string;
+  media_ocr?: string;
+  
+  // Status
+  is_archived?: number;
 }
 
 export function createNote(note: Omit<Note, 'created_at' | 'updated_at'>): Note {
   const db = getDb();
   const stmt = db.prepare(`
-    INSERT INTO notes (id, content, content_type, source, embedding, metadata)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO notes (
+      id, content, content_type, source, embedding, metadata,
+      para_category, project_id, area_id, title, summary, key_insights,
+      media_url, media_transcript, media_ocr, is_archived
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
   
   stmt.run(
@@ -43,7 +65,17 @@ export function createNote(note: Omit<Note, 'created_at' | 'updated_at'>): Note 
     note.content_type,
     note.source,
     note.embedding,
-    note.metadata
+    note.metadata,
+    note.para_category || 'resources',
+    note.project_id || null,
+    note.area_id || null,
+    note.title || null,
+    note.summary || null,
+    note.key_insights || null,
+    note.media_url || null,
+    note.media_transcript || null,
+    note.media_ocr || null,
+    note.is_archived || 0
   );
   
   return getNoteById(note.id)!;
@@ -54,10 +86,24 @@ export function getNoteById(id: string): Note | undefined {
   return db.prepare('SELECT * FROM notes WHERE id = ?').get(id) as Note | undefined;
 }
 
-export function getAllNotes(limit = 100, offset = 0): Note[] {
+export function getAllNotes(limit = 100, offset = 0, paraCategory?: string): Note[] {
   const db = getDb();
-  return db.prepare('SELECT * FROM notes ORDER BY created_at DESC LIMIT ? OFFSET ?')
-    .all(limit, offset) as Note[];
+  
+  if (paraCategory) {
+    return db.prepare(`
+      SELECT * FROM notes 
+      WHERE para_category = ? AND is_archived = 0
+      ORDER BY created_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(paraCategory, limit, offset) as Note[];
+  }
+  
+  return db.prepare(`
+    SELECT * FROM notes 
+    WHERE is_archived = 0
+    ORDER BY created_at DESC 
+    LIMIT ? OFFSET ?
+  `).all(limit, offset) as Note[];
 }
 
 export function searchNotes(query: string): Note[] {
@@ -155,4 +201,69 @@ export function getStats() {
     tags: tags.count,
     connections: connections.count
   };
+}
+
+// 🧠 Semantic Search Operations
+export interface NoteWithEmbedding {
+  id: string;
+  content: string;
+  content_type: string;
+  source: string;
+  created_at: string;
+  updated_at: string;
+  embedding: number[];
+}
+
+export function getNotesWithEmbeddings(): NoteWithEmbedding[] {
+  const db = getDb();
+  const notes = db.prepare('SELECT * FROM notes WHERE embedding IS NOT NULL').all() as Note[];
+  
+  return notes.map(note => ({
+    id: note.id,
+    content: note.content,
+    content_type: note.content_type,
+    source: note.source,
+    created_at: note.created_at,
+    updated_at: note.updated_at,
+    embedding: bufferToFloatArray(note.embedding!)
+  }));
+}
+
+export function updateNoteEmbedding(noteId: string, embedding: number[]): void {
+  const db = getDb();
+  const buffer = floatArrayToBuffer(embedding);
+  db.prepare('UPDATE notes SET embedding = ? WHERE id = ?').run(buffer, noteId);
+}
+
+// 🪝 HOOKED: Surprise Connections
+export function getRandomNote(): Note | undefined {
+  const db = getDb();
+  return db.prepare('SELECT * FROM notes ORDER BY RANDOM() LIMIT 1').get() as Note | undefined;
+}
+
+export function getNoteByIdWithEmbedding(id: string): NoteWithEmbedding | undefined {
+  const db = getDb();
+  const note = db.prepare('SELECT * FROM notes WHERE id = ? AND embedding IS NOT NULL').get(id) as Note | undefined;
+  if (!note) return undefined;
+  
+  return {
+    id: note.id,
+    content: note.content,
+    content_type: note.content_type,
+    source: note.source,
+    created_at: note.created_at,
+    updated_at: note.updated_at,
+    embedding: bufferToFloatArray(note.embedding!)
+  };
+}
+
+// Helper functions
+function floatArrayToBuffer(arr: number[]): Buffer {
+  const floatArray = new Float32Array(arr);
+  return Buffer.from(floatArray.buffer);
+}
+
+function bufferToFloatArray(buffer: Buffer): number[] {
+  const floatArray = new Float32Array(buffer.buffer, buffer.byteOffset, buffer.byteLength / 4);
+  return Array.from(floatArray);
 }
