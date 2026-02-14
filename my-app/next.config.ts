@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // Modo servidor para soportar API routes con NEON
   distDir: 'dist',
   images: {
     unoptimized: true,

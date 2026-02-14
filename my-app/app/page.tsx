@@ -61,30 +61,21 @@ export default function SecondBrain() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeView, setActiveView] = useState<"list" | "graph">("list");
 
-  // 🧠 LOCALSTORAGE: Cargar notas al montar
+  // 🧠 NEON: Cargar notas desde PostgreSQL
   useEffect(() => {
-    loadNotesFromStorage();
+    loadNotesFromNeon();
   }, []);
 
-  const loadNotesFromStorage = () => {
+  const loadNotesFromNeon = async () => {
     try {
-      const stored = localStorage.getItem('papacito-notes');
-      if (stored) {
-        const parsedNotes = JSON.parse(stored);
-        setNotes(parsedNotes);
-        updateStats(parsedNotes);
+      const response = await fetch('/api/notes');
+      if (response.ok) {
+        const data = await response.json();
+        setNotes(data.notes);
+        setStats(data.stats);
       }
     } catch (error) {
-      console.error("Error loading notes:", error);
-    }
-  };
-
-  const saveNotesToStorage = (newNotes: Note[]) => {
-    try {
-      localStorage.setItem('papacito-notes', JSON.stringify(newNotes));
-      updateStats(newNotes);
-    } catch (error) {
-      console.error("Error saving notes:", error);
+      console.error("Error loading notes from Neon:", error);
     }
   };
 
@@ -110,23 +101,22 @@ export default function SecondBrain() {
     
     setIsLoading(true);
     try {
-      // 🧠 Crear nota local
-      const note: Note = {
-        id: Date.now().toString(),
-        content: newNote,
-        content_type: "text",
-        source: "web",
-        created_at: new Date().toISOString(),
-        tags: extractTags(newNote),
-      };
+      // 🧠 NEON: Crear nota en PostgreSQL
+      const response = await fetch('/api/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: newNote,
+          tags: extractTags(newNote)
+        })
+      });
       
-      const updatedNotes = [note, ...notes];
-      setNotes(updatedNotes);
-      saveNotesToStorage(updatedNotes);
-      setNewNote("");
-      
-      // 🔄 TODO: Sync con Supabase cuando esté listo
-      // await syncToSupabase(note);
+      if (response.ok) {
+        const note = await response.json();
+        setNotes([note, ...notes]);
+        setStats(prev => ({ ...prev, notes: prev.notes + 1 }));
+        setNewNote("");
+      }
       
     } catch (error) {
       console.error("Error creating note:", error);
